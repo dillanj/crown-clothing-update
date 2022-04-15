@@ -2,8 +2,20 @@
 import { initializeApp } from "firebase/app";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
-import { getFirestore, doc, setDoc, getDoc, collection, writeBatch  } from 'firebase/firestore';
-import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { 
+  getFirestore,
+  doc, 
+  setDoc, 
+  getDoc, 
+  collection, 
+  writeBatch
+} from 'firebase/firestore';
+
+import { 
+  getAuth,
+  GoogleAuthProvider, 
+  signInWithPopup
+} from 'firebase/auth';
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -19,7 +31,7 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 // Initialize Firebase FireStore and Authentication
-export const firestore = getFirestore(app);
+export const db = getFirestore(app);
 export const auth = getAuth(app);
 
 export const googleProvider = new GoogleAuthProvider();
@@ -31,10 +43,10 @@ export const signInWithGooglePopup = () => signInWithPopup(auth, googleProvider)
 /* METHODS */
 
 /* createUserProfileDocument creates our user account in our database */ 
-export const createUserProfileDocument = async (userAuth, additionalData) => {
+export const createUserDocumentFromAuth = async (userAuth, additionalData) => {
   if(!userAuth) return;
 
-  const userDocRef = doc(firestore, 'users', userAuth.uid);
+  const userDocRef = doc(db, 'users', userAuth.uid);
 
   const userDoc = await getDoc( userDocRef );
 
@@ -76,8 +88,8 @@ export const convertCollectionsSnapshotToMap = (collections) => {
 
 
 export const addCollectionAndDocuments = async (collectionKey, objectsToAdd) => {
-  const collectionRef = collection(firestore, collectionKey);
-  const batch = writeBatch(firestore);
+  const collectionRef = collection(db, collectionKey);
+  const batch = writeBatch(db);
   objectsToAdd.forEach((object) => {
     const newDocRef = doc(collectionRef);
     batch.set(newDocRef, object);
