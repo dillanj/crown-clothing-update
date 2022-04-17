@@ -2,19 +2,21 @@
 import { initializeApp } from "firebase/app";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
-import { 
+import {
   getFirestore,
-  doc, 
-  setDoc, 
-  getDoc, 
-  collection, 
+  doc,
+  setDoc,
+  getDoc,
+  collection,
   writeBatch
 } from 'firebase/firestore';
 
-import { 
+import {
   getAuth,
-  GoogleAuthProvider, 
-  signInWithPopup
+  GoogleAuthProvider,
+  signInWithRedirect,
+  signInWithPopup,
+  createUserWithEmailAndPassword
 } from 'firebase/auth';
 
 // Your web app's Firebase configuration
@@ -35,22 +37,30 @@ export const db = getFirestore(app);
 export const auth = getAuth(app);
 
 export const googleProvider = new GoogleAuthProvider();
-googleProvider.setCustomParameters({ prompt: 'select_account'});
+googleProvider.setCustomParameters({ prompt: 'select_account' });
 export const signInWithGooglePopup = () => signInWithPopup(auth, googleProvider);
+export const signInWithGoogleRedirect = () => signInWithRedirect(auth, googleProvider);
+
 
 
 
 /* METHODS */
 
-/* createUserProfileDocument creates our user account in our database */ 
-export const createUserDocumentFromAuth = async (userAuth, additionalData) => {
-  if(!userAuth) return;
+/* createAuthUserWithEmailAndPassword will create a new auth user in firebase via email and password */
+export const createAuthUserWithEmailAndPassword = async (email, password) => {
+  if (!email || !password) return;
+  return await createUserWithEmailAndPassword(auth, email, password);
+}
+
+/* createUserProfileDocument creates our user account in our database */
+export const createUserDocumentFromAuth = async (userAuth, additionalData = {}) => {
+  if (!userAuth) return;
 
   const userDocRef = doc(db, 'users', userAuth.uid);
 
-  const userDoc = await getDoc( userDocRef );
+  const userDoc = await getDoc(userDocRef);
 
-  if (!userDoc.exists()){
+  if (!userDoc.exists()) {
     const { displayName, email, uid } = userAuth;
     const createdAt = new Date();
 
@@ -62,46 +72,50 @@ export const createUserDocumentFromAuth = async (userAuth, additionalData) => {
         createdAt,
         ...additionalData
       })
-    } catch(error){
+    } catch (error) {
       console.log("error creating user: ", error.message);
     }
   }
   return userDocRef;
 };
 
-
-export const convertCollectionsSnapshotToMap = (collections) => {
-  const transformedCollection = collections.docs.map(doc => {
-    const { title, items } = doc.data();
-    return {
-      routeName: encodeURI(title.toLowerCase()),
-      id: doc.id,
-      title: title,
-      items: items
-    }
-  })
-  return transformedCollection.reduce((accumulator, collection) => {
-    accumulator[collection.title.toLowerCase()] = collection;
-    return accumulator;
-  }, {})
-};
+// export const getCurrentUser = () => {
+//   return new Promise((resolve, reject) => {
+//     const unsubscribe = auth.onAuthStateChanged(userAuth => {
+//       unsubscribe();
+//       resolve(userAuth);
+//     }, reject);
+//   });
+// }
 
 
-export const addCollectionAndDocuments = async (collectionKey, objectsToAdd) => {
-  const collectionRef = collection(db, collectionKey);
-  const batch = writeBatch(db);
-  objectsToAdd.forEach((object) => {
-    const newDocRef = doc(collectionRef);
-    batch.set(newDocRef, object);
-  })
-  await batch.commit();
-};
+// export const convertCollectionsSnapshotToMap = (collections) => {
+//   const transformedCollection = collections.docs.map(doc => {
+//     const { title, items } = doc.data();
+//     return {
+//       routeName: encodeURI(title.toLowerCase()),
+//       id: doc.id,
+//       title: title,
+//       items: items
+//     }
+//   })
+//   return transformedCollection.reduce((accumulator, collection) => {
+//     accumulator[collection.title.toLowerCase()] = collection;
+//     return accumulator;
+//   }, {})
+// };
 
-export const getCurrentUser = () => {
-  return new Promise((resolve, reject) => {
-    const unsubscribe = auth.onAuthStateChanged(userAuth => {
-      unsubscribe();
-      resolve(userAuth);
-    }, reject);
-  });
-}
+
+// export const addCollectionAndDocuments = async (collectionKey, objectsToAdd) => {
+//   const collectionRef = collection(db, collectionKey);
+//   const batch = writeBatch(db);
+//   objectsToAdd.forEach((object) => {
+//     const newDocRef = doc(collectionRef);
+//     batch.set(newDocRef, object);
+//   })
+//   await batch.commit();
+// };
+
+
+
+
