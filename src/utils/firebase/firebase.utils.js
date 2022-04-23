@@ -18,7 +18,8 @@ import {
   signInWithPopup,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
-  signOut
+  signOut,
+  onAuthStateChanged,
 } from 'firebase/auth';
 
 // Your web app's Firebase configuration
@@ -48,6 +49,7 @@ export const signInWithGoogleRedirect = () => signInWithRedirect(auth, googlePro
 
 /* METHODS */
 
+/* AUTH METHODS */
 /* createAuthUserWithEmailAndPassword will create a new auth user in firebase via email and password */
 export const createAuthUserWithEmailAndPassword = async (email, password) => {
   if (!email || !password) return;
@@ -60,6 +62,14 @@ export const signInUserWithEmailAndPassword = async (email, password) => {
 };
 
 export const signOutUser = async () => await signOut(auth);
+
+export const onAuthStateChangedListener = (callback) => {
+  if (!callback) return;
+  return onAuthStateChanged(auth, callback);
+}
+
+
+/* FIRESTORE METHODS */
 
 /* createUserProfileDocument creates our user account in our database */
 export const createUserDocumentFromAuth = async (userAuth, additionalData = {}) => {
