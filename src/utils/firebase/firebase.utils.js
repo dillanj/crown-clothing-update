@@ -8,7 +8,9 @@ import {
   setDoc,
   getDoc,
   collection,
-  writeBatch
+  writeBatch,
+  query,
+  getDocs
 } from 'firebase/firestore';
 
 import {
@@ -124,16 +126,30 @@ export const createUserDocumentFromAuth = async (userAuth, additionalData = {}) 
 //   }, {})
 // };
 
+export const getCategoriesAndDocuments = async () => {
+  const collectionRef = collection(db, 'categories');
+  const q = query(collectionRef);
 
-// export const addCollectionAndDocuments = async (collectionKey, objectsToAdd) => {
-//   const collectionRef = collection(db, collectionKey);
-//   const batch = writeBatch(db);
-//   objectsToAdd.forEach((object) => {
-//     const newDocRef = doc(collectionRef);
-//     batch.set(newDocRef, object);
-//   })
-//   await batch.commit();
-// };
+  const querySnapshot = await getDocs(q);
+  const categoryMap = querySnapshot.docs.reduce((acc, docSnapshot) => {
+    const { title, items } = docSnapshot.data();
+    acc[title.toLowerCase()] = items;
+    return acc;
+  }, {});
+
+  return categoryMap;
+}
+
+export const addCollectionAndDocuments = async (collectionKey, objectsToAdd) => {
+  const collectionRef = collection(db, collectionKey);
+  const batch = writeBatch(db);
+  objectsToAdd.forEach((object) => {
+    const newDocRef = doc(collectionRef, object.title.toLowerCase());
+    batch.set(newDocRef, object);
+  })
+  await batch.commit();
+  console.log("done");
+};
 
 
 

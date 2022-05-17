@@ -62,6 +62,14 @@ export const CartProvider = ({ children }) => {
     setCartCount(newCartCount);
   }, [cartItems]);
 
+  useEffect(() => {
+    const newCartTotal = cartItems.reduce(
+      (total, cartItem) => total + cartItem.quantity * cartItem.price,
+      0
+    );
+    setCartTotal(newCartTotal);
+  }, [cartItems]);
+
   const addItemToCart = (productToAdd) => {
     setCartItems(addCartItem(cartItems, productToAdd));
   };
