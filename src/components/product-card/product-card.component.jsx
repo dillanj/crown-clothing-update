@@ -2,7 +2,9 @@ import { useContext } from "react";
 import { CartContext } from "../../contexts/cart.context";
 import "./product-card.styles.scss";
 
-import CustomButton from "../custom-button/custom-button.component";
+import CustomButton, {
+  BUTTON_TYPE_CLASSES,
+} from "../custom-button/custom-button.component";
 
 const ProductCard = ({ product }) => {
   const { name, price, imageUrl } = product;
@@ -16,7 +18,10 @@ const ProductCard = ({ product }) => {
         <span className="name">{name}</span>
         <span className="price">{price}</span>
       </div>
-      <CustomButton buttonType="inverted" onClick={handleAddToCart}>
+      <CustomButton
+        buttonType={BUTTON_TYPE_CLASSES.inverted}
+        onClick={handleAddToCart}
+      >
         Add To Cart
       </CustomButton>
     </div>
