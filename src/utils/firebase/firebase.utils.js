@@ -10,8 +10,8 @@ import {
   collection,
   writeBatch,
   query,
-  getDocs
-} from 'firebase/firestore';
+  getDocs,
+} from "firebase/firestore";
 
 import {
   getAuth,
@@ -22,7 +22,7 @@ import {
   signInWithEmailAndPassword,
   signOut,
   onAuthStateChanged,
-} from 'firebase/auth';
+} from "firebase/auth";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -31,9 +31,8 @@ const firebaseConfig = {
   projectId: "crown-clothing-5aade",
   storageBucket: "crown-clothing-5aade.appspot.com",
   messagingSenderId: "384013851337",
-  appId: "1:384013851337:web:424848f978b43765580b18"
+  appId: "1:384013851337:web:424848f978b43765580b18",
 };
-
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
@@ -42,12 +41,11 @@ export const db = getFirestore(app);
 export const auth = getAuth(app);
 
 export const googleProvider = new GoogleAuthProvider();
-googleProvider.setCustomParameters({ prompt: 'select_account' });
-export const signInWithGooglePopup = () => signInWithPopup(auth, googleProvider);
-export const signInWithGoogleRedirect = () => signInWithRedirect(auth, googleProvider);
-
-
-
+googleProvider.setCustomParameters({ prompt: "select_account" });
+export const signInWithGooglePopup = () =>
+  signInWithPopup(auth, googleProvider);
+export const signInWithGoogleRedirect = () =>
+  signInWithRedirect(auth, googleProvider);
 
 /* METHODS */
 
@@ -56,7 +54,7 @@ export const signInWithGoogleRedirect = () => signInWithRedirect(auth, googlePro
 export const createAuthUserWithEmailAndPassword = async (email, password) => {
   if (!email || !password) return;
   return await createUserWithEmailAndPassword(auth, email, password);
-}
+};
 
 export const signInUserWithEmailAndPassword = async (email, password) => {
   if (!email || !password) return;
@@ -68,16 +66,18 @@ export const signOutUser = async () => await signOut(auth);
 export const onAuthStateChangedListener = (callback) => {
   if (!callback) return;
   return onAuthStateChanged(auth, callback);
-}
-
+};
 
 /* FIRESTORE METHODS */
 
 /* createUserProfileDocument creates our user account in our database */
-export const createUserDocumentFromAuth = async (userAuth, additionalData = {}) => {
+export const createUserDocumentFromAuth = async (
+  userAuth,
+  additionalData = {}
+) => {
   if (!userAuth) return;
 
-  const userDocRef = doc(db, 'users', userAuth.uid);
+  const userDocRef = doc(db, "users", userAuth.uid);
 
   const userDoc = await getDoc(userDocRef);
 
@@ -91,8 +91,8 @@ export const createUserDocumentFromAuth = async (userAuth, additionalData = {}) 
         id: uid,
         email,
         createdAt,
-        ...additionalData
-      })
+        ...additionalData,
+      });
     } catch (error) {
       console.log("error creating user: ", error.message);
     }
@@ -108,7 +108,6 @@ export const createUserDocumentFromAuth = async (userAuth, additionalData = {}) 
 //     }, reject);
 //   });
 // }
-
 
 // export const convertCollectionsSnapshotToMap = (collections) => {
 //   const transformedCollection = collections.docs.map(doc => {
@@ -127,7 +126,7 @@ export const createUserDocumentFromAuth = async (userAuth, additionalData = {}) 
 // };
 
 export const getCategoriesAndDocuments = async () => {
-  const collectionRef = collection(db, 'categories');
+  const collectionRef = collection(db, "categories");
   const q = query(collectionRef);
 
   const querySnapshot = await getDocs(q);
@@ -138,19 +137,15 @@ export const getCategoriesAndDocuments = async () => {
   }, {});
 
   return categoryMap;
-}
-
-export const addCollectionAndDocuments = async (collectionKey, objectsToAdd) => {
-  const collectionRef = collection(db, collectionKey);
-  const batch = writeBatch(db);
-  objectsToAdd.forEach((object) => {
-    const newDocRef = doc(collectionRef, object.title.toLowerCase());
-    batch.set(newDocRef, object);
-  })
-  await batch.commit();
-  console.log("done");
 };
 
-
-
-
+// export const addCollectionAndDocuments = async (collectionKey, objectsToAdd) => {
+//   const collectionRef = collection(db, collectionKey);
+//   const batch = writeBatch(db);
+//   objectsToAdd.forEach((object) => {
+//     const newDocRef = doc(collectionRef, object.title.toLowerCase());
+//     batch.set(newDocRef, object);
+//   })
+//   await batch.commit();
+//   console.log("done");
+// };
