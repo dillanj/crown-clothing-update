@@ -1,21 +1,6 @@
 import { createAction } from "../../utils/reducer/reducer.utils";
 import { CART_ACTION_TYPES } from "./cart.types";
 
-export const setIsCartOpen = (isOpen) =>
-  createAction(CART_ACTION_TYPES.SET_IS_CART_OPEN, isOpen);
-
-const addItemToCart = (productToAdd) => {
-  setCartItems(addCartItem(cartItems, productToAdd));
-};
-
-const removeItemFromCart = (cartItemToRemove) => {
-  setCartItems(removeCartItem(cartItems, cartItemToRemove));
-};
-
-const clearItemFromCart = (cartItemToRemove) => {
-  setCartItems(clearCartItem(cartItems, cartItemToRemove));
-};
-
 const addCartItem = (cartItems, productToAdd) => {
   let existingCartItem = cartItems.find((item) => item.id === productToAdd.id);
   if (existingCartItem) {
@@ -46,4 +31,22 @@ const removeCartItem = (cartItems, cartItemToRemove) => {
 
 const clearCartItem = (cartItems, cartItemToRemove) => {
   return cartItems.filter((cartItem) => cartItem.id !== cartItemToRemove.id);
+};
+
+export const setIsCartOpen = (isOpen) =>
+  createAction(CART_ACTION_TYPES.SET_IS_CART_OPEN, isOpen);
+
+export const addItemToCart = (cartItems, productToAdd) => {
+  const newCartItems = addCartItem(cartItems, productToAdd);
+  return createAction(CART_ACTION_TYPES.SET_CART_ITEMS, newCartItems);
+};
+
+export const removeItemFromCart = (cartItems, cartItemToRemove) => {
+  const newCartItems = removeCartItem(cartItems, cartItemToRemove);
+  return createAction(CART_ACTION_TYPES.SET_CART_ITEMS, newCartItems);
+};
+
+export const clearItemFromCart = (cartItems, cartItemToRemove) => {
+  const newCartItems = clearCartItem(cartItems, cartItemToRemove);
+  return createAction(CART_ACTION_TYPES.SET_CART_ITEMS, newCartItems);
 };
