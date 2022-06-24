@@ -97,7 +97,7 @@ export const createUserDocumentFromAuth = async (
       console.log("error creating user: ", error.message);
     }
   }
-  return userDocRef;
+  return userDoc;
 };
 
 // export const getCurrentUser = () => {
@@ -133,6 +133,18 @@ export const getCategoriesAndDocuments = async () => {
   return querySnapshot.docs.map((docSnapshot) => docSnapshot.data());
 };
 
+export const getCurrentUser = () => {
+  return new Promise((resolve, reject) => {
+    const unsubscribe = onAuthStateChanged(
+      auth,
+      (userAuth) => {
+        unsubscribe();
+        resolve(userAuth);
+      },
+      reject
+    );
+  });
+};
 // export const addCollectionAndDocuments = async (collectionKey, objectsToAdd) => {
 //   const collectionRef = collection(db, collectionKey);
 //   const batch = writeBatch(db);
