@@ -16,7 +16,6 @@ export const UserContext = createContext({
 });
 
 const userReducer = (state, action) => {
-  console.log("action", action);
   const { type, payload } = action;
 
   switch (type) {
