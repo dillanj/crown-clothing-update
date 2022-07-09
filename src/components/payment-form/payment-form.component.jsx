@@ -31,9 +31,13 @@ const PaymentForm = () => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ amount: amount * 100 }),
-    }).then((res) => {
-      return res.json();
-    });
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .catch((err) => {
+        console.error("Error getting payment intent.", err);
+      });
 
     const clientSecret = response.paymentIntent.client_secret;
 
