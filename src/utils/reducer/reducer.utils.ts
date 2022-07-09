@@ -1,5 +1,28 @@
 import { AnyAction } from "redux";
 
+type Matchable<AC extends () => AnyAction> = AC & {
+  type: ReturnType<AC>["type"];
+  match(action: AnyAction): action is ReturnType<AC>;
+};
+// action creator without params
+export function withMatcher<AC extends () => AnyAction & { type: string }>(
+  actionCreator: AC
+): Matchable<AC>;
+// action creator with params
+export function withMatcher<
+  AC extends (...args: any[]) => AnyAction & { type: string }
+>(actionCreator: AC): Matchable<AC>;
+// The purpose of this function is to extract the type off the createAction function.
+export function withMatcher(actionCreator: Function) {
+  const type = actionCreator().type;
+  return Object.assign(actionCreator, {
+    type,
+    match(action: AnyAction) {
+      return action.type === type;
+    },
+  });
+}
+
 export type ActionWithPayload<T, P> = {
   type: T;
   payload: P;
@@ -8,7 +31,6 @@ export type ActionWithPayload<T, P> = {
 export type Action<T> = {
   type: T;
 };
-// dillan
 
 export function createAction<T extends string, P>(
   type: T,
