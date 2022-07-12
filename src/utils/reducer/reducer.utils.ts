@@ -8,10 +8,12 @@ type Matchable<AC extends () => AnyAction> = AC & {
 export function withMatcher<AC extends () => AnyAction & { type: string }>(
   actionCreator: AC
 ): Matchable<AC>;
+
 // action creator with params
 export function withMatcher<
   AC extends (...args: any[]) => AnyAction & { type: string }
 >(actionCreator: AC): Matchable<AC>;
+
 // The purpose of this function is to extract the type off the createAction function.
 export function withMatcher(actionCreator: Function) {
   const type = actionCreator().type;
