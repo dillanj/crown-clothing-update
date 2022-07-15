@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import { BrowserRouter } from "react-router-dom";
 // redux
 import { Provider } from "react-redux";
-import { store, persistor } from "./store/store.js";
+import { store, persistor } from "./store/store";
 
 // stripe
 import { Elements } from "@stripe/react-stripe-js";
