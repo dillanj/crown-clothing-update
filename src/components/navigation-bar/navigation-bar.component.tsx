@@ -9,7 +9,6 @@ import { selectCurrentUser } from "../../store/user/user.selector";
 import CartIcon from "../cart-icon/cart-icon.component";
 import CartDropdown from "../cart-dropdown/cart-dropdown.component";
 
-// import { signOutUser } from "../../utils/firebase/firebase.utils";
 import { signOutStart } from "../../store/user/user.action";
 
 import { ReactComponent as CrownLogo } from "../../assets/crown.svg";
