@@ -19,7 +19,7 @@ import {
   NavLinks,
   NavLink,
   LogoContainer,
-} from "./navigation-bar.styles.jsx";
+} from "./navigation-bar.styles";
 
 const NavigationBar = () => {
   const currentUser = useSelector(selectCurrentUser);

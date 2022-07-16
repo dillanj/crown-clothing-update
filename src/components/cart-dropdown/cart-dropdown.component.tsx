@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { selectCartItems } from "../../store/cart/cart.selector";
 
 import CartItem from "../cart-item/cart-item.component";
-import "./cart-dropdown.styles.jsx";
+import "./cart-dropdown.styles";
 
 import CustomButton from "../custom-button/custom-button.component";
 
