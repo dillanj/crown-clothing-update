@@ -12,6 +12,7 @@ import { stripePromise } from "./utils/stripe/stripe.utils.js";
 // redux persist
 import { PersistGate } from "redux-persist/integration/react";
 
+import { GlobalStyle } from "./global.styles";
 import App from "./App";
 // import { UserProvider } from "./contexts/user.context";
 // import { CategoriesProvider } from "./contexts/categories.context";
@@ -19,7 +20,7 @@ import App from "./App";
 
 import reportWebVitals from "./reportWebVitals";
 
-import "./index.scss";
+// import "./index.scss";
 
 ReactDOM.render(
   <React.StrictMode>
@@ -30,6 +31,7 @@ ReactDOM.render(
           {/* <CategoriesProvider> */}
           {/* <CartProvider> */}
           <Elements stripe={stripePromise}>
+            <GlobalStyle />
             <App />
           </Elements>
           {/* </CartProvider> */}

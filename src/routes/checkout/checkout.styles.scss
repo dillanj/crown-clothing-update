@@ -29,3 +29,25 @@
     font-size: 36px;
   }
 }
+
+@media screen and (max-width: 800px) {
+  .checkout-container {
+    width: 90%;
+
+    .checkout-header {
+      .header-block:nth-child(2) {
+        display: none !important;
+      }
+      .header-block {
+        font-size: 12px;
+        width: auto !important;
+      }
+    }
+
+    .total {
+      margin-top: 20px;
+      margin-left: auto;
+      font-size: 26px;
+    }
+  }
+}

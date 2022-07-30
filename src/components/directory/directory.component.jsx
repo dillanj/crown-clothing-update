@@ -3,6 +3,7 @@ import DirectoryItem from "../directory-item/directory-item.component";
 import "./directory.styles.scss";
 
 const Directory = () => {
+  console.log("DIRECTORY RENDERED");
   const categories = [
     {
       id: 1,

@@ -71,10 +71,7 @@ const PaymentForm = () => {
 
   return (
     <PaymentFormContainer>
-      <FormContainer
-        onSubmit={paymentHandler}
-        style={{ border: "solid red 2px" }}
-      >
+      <FormContainer onSubmit={paymentHandler}>
         <h2>Credit Card Payment: </h2>
         <CardElement />
         <PaymentButton

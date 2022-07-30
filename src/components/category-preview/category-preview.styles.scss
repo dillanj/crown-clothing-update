@@ -15,3 +15,17 @@
     column-gap: 20px;
   }
 }
+
+@media screen and (max-width: 800px) {
+  .category-preview-container {
+    align-items: center;
+  }
+
+  .preview {
+    display: grid;
+    flex-wrap: wrap;
+    grid-template-columns: 1fr 1fr !important;
+    column-gap: 25px !important;
+    row-gap: 25px !important;
+  }
+}
